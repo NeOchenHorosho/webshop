@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-4">
+    <div class="row">
+      {% for product in object_list %}
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <div class="card-header">
+              <h5 class="card-title mb-0">{{ product.name }}</h5>
+            </div>
+            <div class="card-body">
+              <p class="card-text">{{ product.description }}</p>
+              <p class="card-text">
+                <strong>Цена:</strong>
+                <span class="text-success">${{ product.price|floatformat:2 }}</span>
+              </p>
+              {% if user.is_authenticated %}
+                <form action="{% url 'add_to_cart' product.pk %}" method="post">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-primary">Добавить в корзину</button>
+                </form>
+              {% else %}
+                <a href="{% url 'login' %}" class="btn btn-secondary">Войдите, чтобы добавить в корзину</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
